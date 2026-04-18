@@ -1,6 +1,6 @@
 ﻿namespace RecipeManagement.Domain._Shared;
 
-public abstract class ParameterDefinition : Entity
+public class ParameterDefinition : Entity
 {
     protected ParameterDefinition() { }
     protected ParameterDefinition(string name, string value, string? dataType, string? description, DateTime utcNow) : base(utcNow)
@@ -11,8 +11,8 @@ public abstract class ParameterDefinition : Entity
         Description = description;
     }
 
-    public string Name { get; private set; } = string.Empty;
-    public string Value { get; private set; } = string.Empty;
-    public string? DataType { get; private set; }
-    public string? Description { get; private set; }
+    public string Name { get; protected set; } = string.Empty;
+    public string Value { get; protected set; } = string.Empty;
+    public string? DataType { get; protected set; }
+    public string? Description { get; protected set; }
 }

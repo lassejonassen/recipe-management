@@ -17,4 +17,7 @@ public static class ProcessSegmentErrors
 
     public static readonly Error ParameterNotFound
         = new($"{Prefix}.ParameterNotFound", "The process segment parameter was not found.", ErrorType.NotFound);
+
+    public static readonly Error ParameterAlreadyExists
+        = new($"{Prefix}.ParameterAlreadyExists", "A process segment parameter with the same name already exists.", ErrorType.Failure);
 }
