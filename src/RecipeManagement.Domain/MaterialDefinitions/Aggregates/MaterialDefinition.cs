@@ -1,6 +1,7 @@
 ﻿using RecipeManagement.Domain.MaterialDefinitions.Entities;
 using RecipeManagement.Domain.MaterialDefinitions.Errors;
 using RecipeManagement.Domain.MaterialDefinitions.Events;
+using RecipeManagement.Domain.ProductSegments.Aggregates;
 
 namespace RecipeManagement.Domain.MaterialDefinitions.Aggregates;
 
@@ -14,6 +15,9 @@ public sealed class MaterialDefinition : AggregateRoot
 
     private readonly List<MaterialDefinitionProperty> _properties = [];
     public IReadOnlyCollection<MaterialDefinitionProperty> Properties => _properties.AsReadOnly();
+
+    private readonly List<ProductSegment> _productSegments = [];
+    public IReadOnlyCollection<ProductSegment> ProductSegments => _productSegments.AsReadOnly();
 
     public static Result<MaterialDefinition> Create(
         string sku,

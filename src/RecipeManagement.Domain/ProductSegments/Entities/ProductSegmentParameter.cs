@@ -1,5 +1,4 @@
-﻿using RecipeManagement.Domain.ProcessSegments.Aggregates;
-using RecipeManagement.Domain.ProcessSegments.Entities;
+﻿using RecipeManagement.Domain.ProcessSegments.Entities;
 using RecipeManagement.Domain.ProductSegments.Aggregates;
 using RecipeManagement.Domain.ProductSegments.Errors;
 
@@ -7,16 +6,18 @@ namespace RecipeManagement.Domain.ProductSegments.Entities;
 
 public class ProductSegmentParameter : ParameterDefinition
 {
-    private ProductSegmentParameter(Guid productSegmentId, string name, string value, string dataType, string actualValue, Guid sourceId, DateTime utcNow)
-        : base(name, value, dataType, utcNow)   
+    private ProductSegmentParameter()  { }
+    private ProductSegmentParameter(Guid productSegmentId, string name, string value, string? dataType, string? description, string actualValue, Guid sourceId, DateTime utcNow)
+        : base(name, value, dataType, description, utcNow)   
     {
         ProductSegmentId = productSegmentId;
         ActualValue = actualValue;
         ProcessSegmentParameterId = sourceId;
     }
 
-    public string ActualValue { get; private set; }
+    public string ActualValue { get; private set; } = string.Empty;
     public Guid ProcessSegmentParameterId { get; private set; }
+    public ProcessSegmentParameter ProcessSegmentParameter { get; } = null!;
     public Guid ProductSegmentId { get; private set; }
     public ProductSegment ProductSegment { get; } = null!;
 
@@ -34,6 +35,7 @@ public class ProductSegmentParameter : ParameterDefinition
             template.Name,
             template.Value,
             template.DataType,
+            template.Description,
             finalValue,
             template.Id,
             utcNow);

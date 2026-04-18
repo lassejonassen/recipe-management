@@ -26,5 +26,10 @@ internal sealed class MaterialDefinitionConfiguration : IEntityTypeConfiguration
             .HasForeignKey(e => e.MaterialDefinitionId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(e => e.ProductSegments)
+            .WithOne()
+            .HasForeignKey(e => e.MaterialDefinitionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

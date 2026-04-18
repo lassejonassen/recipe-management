@@ -1,5 +1,6 @@
 ﻿using RecipeManagement.Domain.ProcessSegments.Entities;
 using RecipeManagement.Domain.ProcessSegments.Enums;
+using RecipeManagement.Domain.ProductSegments.Aggregates;
 
 namespace RecipeManagement.Domain.ProcessSegments.Aggregates;
 
@@ -15,4 +16,7 @@ public sealed class ProcessSegment : AggregateRoot
 
     private readonly List<ProcessSegmentParameter> _parameters = [];
     public IReadOnlyCollection<ProcessSegmentParameter> Parameters => _parameters.AsReadOnly();
+
+    private readonly List<ProductSegment> _productSegments = [];
+    public IReadOnlyCollection<ProductSegment> ProductSegments => _productSegments.AsReadOnly();
 }
