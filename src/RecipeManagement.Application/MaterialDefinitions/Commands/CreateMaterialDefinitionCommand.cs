@@ -1,4 +1,4 @@
-﻿using RecipeManagement.Domain.MaterialDefinitions.Entities;
+﻿using RecipeManagement.Domain.MaterialDefinitions.Aggregates;
 using RecipeManagement.Domain.MaterialDefinitions.Errors;
 using RecipeManagement.Domain.MaterialDefinitions.Repositories;
 

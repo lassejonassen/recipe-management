@@ -11,6 +11,8 @@ using RabbitMQ.Client;
 using RecipeManagement.Application.Abstractions.DomainEvents;
 using RecipeManagement.Application.Abstractions.IntegrationEvents;
 using RecipeManagement.Domain.MaterialDefinitions.Repositories;
+using RecipeManagement.Domain.ProcessSegments.Repositories;
+using RecipeManagement.Domain.ProductSegments.Repositories;
 using RecipeManagement.Infrastructure;
 using RecipeManagement.Infrastructure.BackgroundServices;
 using RecipeManagement.Infrastructure.DomainEvents;
@@ -71,6 +73,8 @@ public static class DependencyInjection
 
         builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
         builder.Services.AddScoped<IMaterialDefinitionRepository, MaterialDefinitionRepository>();
+        builder.Services.AddScoped<IProcessSegmentRepository, ProcessSegmentRepository>();
+        builder.Services.AddScoped<IProductSegmentRepository, ProductSegmentRepository>();
 
 
         return builder;

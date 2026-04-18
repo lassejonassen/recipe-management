@@ -1,0 +1,23 @@
+﻿using Microsoft.EntityFrameworkCore;
+using RecipeManagement.Domain.ProductSegments.Aggregates;
+using RecipeManagement.Domain.ProductSegments.Repositories;
+using RecipeManagement.Infrastructure.Persistence.DbContexts;
+
+namespace RecipeManagement.Infrastructure.Persistence.Repositories;
+
+internal sealed class ProductSegmentRepository
+    (ApplicationDbContext context)
+     : Repository<ProductSegment>(context), IProductSegmentRepository
+{
+    public async Task<IReadOnlyCollection<ProductSegment>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await DbContext.Set<ProductSegment>().ToListAsync(cancellationToken);
+    }
+
+    public async Task<ProductSegment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await DbContext.Set<ProductSegment>()
+           .Include(x => x.Parameters)
+           .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+}

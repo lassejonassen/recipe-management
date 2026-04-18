@@ -1,7 +1,8 @@
-﻿using RecipeManagement.Domain.MaterialDefinitions.Errors;
+﻿using RecipeManagement.Domain.MaterialDefinitions.Entities;
+using RecipeManagement.Domain.MaterialDefinitions.Errors;
 using RecipeManagement.Domain.MaterialDefinitions.Events;
 
-namespace RecipeManagement.Domain.MaterialDefinitions.Entities;
+namespace RecipeManagement.Domain.MaterialDefinitions.Aggregates;
 
 public sealed class MaterialDefinition : AggregateRoot
 {

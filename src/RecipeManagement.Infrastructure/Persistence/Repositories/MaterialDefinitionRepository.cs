@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RecipeManagement.Domain.MaterialDefinitions.Entities;
+using RecipeManagement.Domain.MaterialDefinitions.Aggregates;
 using RecipeManagement.Domain.MaterialDefinitions.Repositories;
 using RecipeManagement.Infrastructure.Persistence.DbContexts;
 

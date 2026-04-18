@@ -1,5 +1,5 @@
 ﻿using RecipeManagement.Domain._Shared;
-using RecipeManagement.Domain.MaterialDefinitions.Entities;
+using RecipeManagement.Domain.MaterialDefinitions.Aggregates;
 
 namespace RecipeManagement.Domain.MaterialDefinitions.Repositories;
 

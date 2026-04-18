@@ -1,0 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
+using RecipeManagement.Domain.ProcessSegments.Aggregates;
+using RecipeManagement.Domain.ProcessSegments.Repositories;
+using RecipeManagement.Infrastructure.Persistence.DbContexts;
+
+namespace RecipeManagement.Infrastructure.Persistence.Repositories;
+
+internal sealed class ProcessSegmentRepository
+    (ApplicationDbContext context)
+     : Repository<ProcessSegment>(context), IProcessSegmentRepository
+{
+    public async Task<IReadOnlyCollection<ProcessSegment>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await DbContext.Set<ProcessSegment>().ToListAsync(cancellationToken);
+    }
+
+    public async Task<ProcessSegment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await DbContext.Set<ProcessSegment>()
+           .Include(x => x.Parameters)
+           .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<bool> IsNameUniqueAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return !await DbContext.Set<ProcessSegment>().AnyAsync(x => x.Name == name, cancellationToken);  
+    }
+}

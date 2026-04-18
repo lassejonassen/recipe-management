@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RecipeManagement.Domain.MaterialDefinitions.Entities;
+using RecipeManagement.Domain.MaterialDefinitions.Aggregates;
 
 namespace RecipeManagement.Infrastructure.Persistence.Configurations;
 
