@@ -21,6 +21,8 @@ public sealed class GetMaterialDefinitionByIdQueryHandler(IMaterialDefinitionRep
             Id = entity.Id,
             Sku = entity.Sku,
             Name = entity.Name,
+            State = entity.State.ToString(),
+            Version = entity.Version,
             CreatedAtUtc = entity.CreatedAtUtc,
             UpdatedAtUtc = entity.UpdatedAtUtc,
             Properties = entity.Properties?.Select(p => new MaterialDefinitionPropertyDTO

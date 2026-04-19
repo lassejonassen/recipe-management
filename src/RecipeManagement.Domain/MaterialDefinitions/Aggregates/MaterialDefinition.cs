@@ -1,7 +1,7 @@
 ﻿using RecipeManagement.Domain.MaterialDefinitions.Entities;
+using RecipeManagement.Domain.MaterialDefinitions.Enums;
 using RecipeManagement.Domain.MaterialDefinitions.Errors;
 using RecipeManagement.Domain.MaterialDefinitions.Events;
-using RecipeManagement.Domain.ProcessSegments.Errors;
 using RecipeManagement.Domain.ProductSegments.Aggregates;
 
 namespace RecipeManagement.Domain.MaterialDefinitions.Aggregates;
@@ -13,6 +13,8 @@ public sealed class MaterialDefinition : AggregateRoot
 
     public string Sku { get; private set; } = string.Empty;
     public string Name { get; private set; } = string.Empty;
+    public int Version { get; private set; }
+    public MaterialDefinitionState State { get; private set; }
 
     private readonly List<MaterialDefinitionProperty> _properties = [];
     public IReadOnlyCollection<MaterialDefinitionProperty> Properties => _properties.AsReadOnly();
@@ -28,8 +30,41 @@ public sealed class MaterialDefinition : AggregateRoot
         var materialDefinition = new MaterialDefinition(utcNow)
         {
             Sku = sku,
-            Name = name
+            Name = name,
+            Version = 1,
+            State = MaterialDefinitionState.Draft
         };
+
+        return Result.Success(materialDefinition);
+    }
+
+    public Result<MaterialDefinition> CreateDraft(DateTime utcNow)
+    {
+        if (State != MaterialDefinitionState.Released)
+            return Result.Failure<MaterialDefinition>(MaterialDefinitionErrors.DraftFromDraftIsInvalid);
+
+        var materialDefinition = new MaterialDefinition(utcNow)
+        {
+            Sku = Sku,
+            Name = Name,
+            Version = Version + 1,
+            State = MaterialDefinitionState.Draft
+        };
+
+        foreach (var property in _properties)
+        {
+            var newProperty = MaterialDefinitionProperty.Create(
+                property.Name,
+                property.Value,
+                property.DataType,
+                property.Description,
+                materialDefinition.Id,
+                utcNow);
+
+            materialDefinition._properties.Add(newProperty.Value);
+        }
+
+        Deprecate();
 
         return Result.Success(materialDefinition);
     }
@@ -39,6 +74,26 @@ public sealed class MaterialDefinition : AggregateRoot
         Name = name;
 
         RaiseDomainEvent(new MaterialDefinitionRenamedDomainEvent(Id, Name));
+
+        return Result.Success();
+    }
+
+    public Result Release()
+    {
+        if (State != MaterialDefinitionState.Draft)
+            return Result.Failure(MaterialDefinitionErrors.InvalidStateChange);
+
+        State = MaterialDefinitionState.Released;
+
+        return Result.Success();
+    }
+
+    public Result Deprecate()
+    {
+        if (State != MaterialDefinitionState.Released)
+            return Result.Failure(MaterialDefinitionErrors.InvalidStateChange);
+
+        State = MaterialDefinitionState.Obsolete;
 
         return Result.Success();
     }

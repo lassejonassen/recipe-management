@@ -17,6 +17,8 @@ public sealed record GetAllMaterialDefinitionsQueryHandler(IMaterialDefinitionRe
             Id = e.Id,
             Sku = e.Sku,
             Name = e.Name,
+            State = e.State.ToString(),
+            Version = e.Version,
             CreatedAtUtc = e.CreatedAtUtc,
             UpdatedAtUtc = e.UpdatedAtUtc,
         })];

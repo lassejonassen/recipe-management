@@ -28,6 +28,8 @@ public class MaterialDefinitionsController : BaseController
             Id = x.Id,
             Name = x.Name,
             Sku = x.Sku,
+            State = x.State,
+            Version = x.Version,
             CreatedAtUtc = x.CreatedAtUtc,
             UpdatedAtUtc = x.UpdatedAtUtc,
         });
@@ -62,6 +64,8 @@ public class MaterialDefinitionsController : BaseController
             Id = result.Value.Id,
             Sku = result.Value.Sku,
             Name = result.Value.Name,
+            State = result.Value.State,
+            Version = result.Value.Version,
             CreatedAtUtc = result.Value.CreatedAtUtc,
             UpdatedAtUtc = result.Value.UpdatedAtUtc,
             Properties = result.Value.Properties?.Select(p => new MaterialDefinitionPropertyResponseDTO
@@ -89,6 +93,31 @@ public class MaterialDefinitionsController : BaseController
     public async Task<IActionResult> Create([FromBody] MaterialDefinitionCreateRequestDTO request, CancellationToken cancellationToken)
     {
         var command = new CreateMaterialDefinitionCommand(request.Sku, request.Name);
+
+        var result = await Mediator.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return HandleFailure(result.Error);
+        }
+
+        return CreatedAtAction(nameof(Get), new { id = result.Value }, result.Value);
+    }
+
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+    [HttpPost("{id:guid}/drafts")]
+    public async Task<IActionResult> CreateDraft([FromRoute] Guid id, [FromBody] MaterialDefinitionCreateDraftRequestDTO request, CancellationToken cancellationToken)
+    {
+        if (id != request.MaterialDefinitionId)
+        {
+            return BadRequest("MaterialDefinitionId in route does not match MaterialDefinitionId in body.");
+        }
+
+        var command = new CreateMaterialDefinitionDraftCommand(id);
 
         var result = await Mediator.Send(command, cancellationToken);
 
@@ -136,6 +165,31 @@ public class MaterialDefinitionsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
+    [HttpPatch("{id:guid}/release")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] MaterialDefinitionReleaseRequestDTO request, CancellationToken cancellationToken)
+    {
+        if (id != request.Id)
+        {
+            return BadRequest("Id in route does not match Id in body.");
+        }
+
+        var command = new ReleaseMaterialDefinitionCommand(id);
+
+        var result = await Mediator.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return HandleFailure(result.Error);
+        }
+
+        return NoContent();
+    }
+
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] MaterialDefinitionUpdateRequestDTO request, CancellationToken cancellationToken)
     {
@@ -157,6 +211,8 @@ public class MaterialDefinitionsController : BaseController
 
         return NoContent();
     }
+
+
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

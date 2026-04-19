@@ -1,5 +1,4 @@
 ﻿using RecipeManagement.Domain.MaterialDefinitions.Entities;
-using RecipeManagement.SharedKernel;
 
 namespace RecipeManagement.Domain.MaterialDefinitions.Errors;
 
@@ -18,4 +17,10 @@ public static class MaterialDefinitionErrors
 
     public static readonly Error NotFound
         = new($"{Prefix}.NotFound", "The material definition was not found.", ErrorType.Failure);
+
+    public static readonly Error InvalidStateChange
+        = new($"{Prefix}.InvalidStateChange", "The state change is invalid", ErrorType.Failure);
+
+    public static readonly Error DraftFromDraftIsInvalid
+    = new($"{Prefix}.DraftFromDraftIsInvalid", "You cannot create a draft from another draft", ErrorType.Failure);
 }
