@@ -21,7 +21,7 @@ public sealed class UpdateProcessSegmentCommandHandler(
 
         bool isNameInUse = await repository.IsNameUniqueAsync(request.Name, cancellationToken);
 
-        if (isNameInUse)
+        if (!isNameInUse)
             return Result.Failure(ProcessSegmentErrors.NameIsAlreadyInUse);
 
         processSegment.Rename(request.Name);
