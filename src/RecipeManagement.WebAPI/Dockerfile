@@ -14,25 +14,25 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
-COPY ["src/CleanArchitecture.WebAPI/CleanArchitecture.WebAPI.csproj", "src/CleanArchitecture.WebAPI/"]
-COPY ["src/CleanArchitecture.Application/CleanArchitecture.Application.csproj", "src/CleanArchitecture.Application/"]
-COPY ["src/CleanArchitecture.Contracts/CleanArchitecture.Contracts.csproj", "src/CleanArchitecture.Contracts/"]
-COPY ["src/CleanArchitecture.SharedKernel/CleanArchitecture.SharedKernel.csproj", "src/CleanArchitecture.SharedKernel/"]
-COPY ["src/CleanArchitecture.Domain/CleanArchitecture.Domain.csproj", "src/CleanArchitecture.Domain/"]
-COPY ["src/CleanArchitecture.Infrastructure/CleanArchitecture.Infrastructure.csproj", "src/CleanArchitecture.Infrastructure/"]
-COPY ["src/CleanArchitecture.WebAPI.Contracts/CleanArchitecture.WebAPI.Contracts.csproj", "src/CleanArchitecture.WebAPI.Contracts/"]
-RUN dotnet restore "./src/CleanArchitecture.WebAPI/CleanArchitecture.WebAPI.csproj"
+COPY ["src/RecipeManagement.WebAPI/RecipeManagement.WebAPI.csproj", "src/RecipeManagement.WebAPI/"]
+COPY ["src/RecipeManagement.Application/RecipeManagement.Application.csproj", "src/RecipeManagement.Application/"]
+COPY ["src/RecipeManagement.Contracts/RecipeManagement.Contracts.csproj", "src/RecipeManagement.Contracts/"]
+COPY ["src/RecipeManagement.SharedKernel/RecipeManagement.SharedKernel.csproj", "src/RecipeManagement.SharedKernel/"]
+COPY ["src/RecipeManagement.Domain/RecipeManagement.Domain.csproj", "src/RecipeManagement.Domain/"]
+COPY ["src/RecipeManagement.Infrastructure/RecipeManagement.Infrastructure.csproj", "src/RecipeManagement.Infrastructure/"]
+COPY ["src/RecipeManagement.WebAPI.Contracts/RecipeManagement.WebAPI.Contracts.csproj", "src/RecipeManagement.WebAPI.Contracts/"]
+RUN dotnet restore "./src/RecipeManagement.WebAPI/RecipeManagement.WebAPI.csproj"
 COPY . .
-WORKDIR "/src/src/CleanArchitecture.WebAPI"
-RUN dotnet build "./CleanArchitecture.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/src/RecipeManagement.WebAPI"
+RUN dotnet build "./RecipeManagement.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./CleanArchitecture.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./RecipeManagement.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CleanArchitecture.WebAPI.dll"]
+ENTRYPOINT ["dotnet", "RecipeManagement.WebAPI.dll"]
