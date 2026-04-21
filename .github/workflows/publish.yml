@@ -1,6 +1,8 @@
 name: Build and Push Docker Image
 
 on:
+  release:
+      types: [published]
   push:
     tags:
       - "v*" # Triggers on tags starting with 'v' (e.g., v1.0.0)
@@ -30,5 +32,6 @@ jobs:
         push: true
         # github.ref_name contains the tag name (e.g., v1.0.2)
         tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/ljt-mes-platform-recipe-management:${{ github.ref_name }}
+          # ${{ secrets.DOCKERHUB_USERNAME }}/ljt-mes-platform-recipe-management:${{ github.ref_name }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/ljt-mes-platform-recipe-management:${{ github.event.release.tag_name }}
           ${{ secrets.DOCKERHUB_USERNAME }}/ljt-mes-platform-recipe-management:latest
