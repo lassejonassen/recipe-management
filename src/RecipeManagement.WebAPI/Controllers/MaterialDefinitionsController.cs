@@ -84,6 +84,26 @@ public class MaterialDefinitionsController : BaseController
         return Ok(_result);
     }
 
+    [ProducesResponseType(typeof(MaterialDefinitionResponseDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+    [HttpGet("{id:guid}/latest-version")]
+    public async Task<IActionResult> GetLatestVersion([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetLatestMaterialDefinitionVersionQuery(id);
+
+        var result = await Mediator.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return HandleFailure(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
