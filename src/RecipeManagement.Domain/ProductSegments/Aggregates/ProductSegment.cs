@@ -55,6 +55,8 @@ public sealed class ProductSegment : AggregateRoot
             StableId = StableId,
         };
 
+        Deprecate();
+
         return Result.Success(productSegment);
     }
 

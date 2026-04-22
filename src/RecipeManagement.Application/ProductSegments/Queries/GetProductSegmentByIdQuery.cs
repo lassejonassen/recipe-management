@@ -34,6 +34,7 @@ public sealed class GetProductSegmentByIdQueryHandler(
                 Value = p.Value,
                 DataType = p.DataType,
                 Description = p.Description,
+                IsReadOnly = p.IsReadOnly
             }).ToList()
         };
 

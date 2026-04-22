@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>0.0.10</Version>
+        <ServiceName>ljt-mes-platform-recipe-management</ServiceName>
+        <Version>0.0.11</Version>
     </PropertyGroup>
 </Project>

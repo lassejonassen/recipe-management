@@ -81,6 +81,7 @@ public class ProductSegmentsController : BaseController
                 Value = p.Value,
                 Description = p.Description,
                 DataType = p.DataType,
+                IsReadOnly = p.IsReadOnly
             }).ToList(),
         };
 

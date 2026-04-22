@@ -7,4 +7,5 @@ public sealed record ProductSegmentParameterDTO
     public required string Value { get; init; }
     public string? Description { get; init; }
     public string? DataType { get; init; }
+    public bool IsReadOnly { get; init; }
 }
